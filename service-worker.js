@@ -5,15 +5,13 @@ var urlsToCache = [
   'icon.png'
 ];
 
-self.addEventListener('install', function(event) {
-  // Perform install steps
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(function(cache) {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+self.addEventListener('install', function(e) {
+  e.waitUntil(
+    caches.open(cacheName).then(function(cache) {
+      return cache.addAll(filesToCache);
+    })
   );
+  self.skipWaiting();
 });
 
 self.addEventListener('fetch', function(event) {
