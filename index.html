@@ -1,24 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Hello World</title>
-  <link rel="manifest" href="/manifest.json">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="images/hello-icon-152.png">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="white"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Hello World">
-  <meta name="msapplication-TileImage" content="images/hello-icon-144.png">
-  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <title>Strona główna</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    /* Define the size of the map container */
+    #map {
+      height: 400px;
+    }
+  </style>
+  <!-- Add manifest file -->
+  <link rel="manifest" href="/manifest.json">
+  <!-- Add Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
 </head>
-<body class="fullscreen">
-  <div class="container">
-    <h1 class="title">Hello World!</h1>
+<body>
+  <div class="container mt-5">
+    <h1>Strona główna</h1>
+    <p>Dane autorów</p>
+    <ul>
+      <li>Autor 1</li>
+      <li>Autor 2</li>
+      <!-- Dodaj więcej autorów w razie potrzeby -->
+    </ul>
+    <hr>
+    <h2>Menu</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <button class="btn btn-primary btn-lg btn-block mb-3" id="showMap">Mapa</button>
+        <!-- Modal for Map -->
+        <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="mapModalLabel">Mapa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div id="map"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-danger btn-lg btn-block" id="triggerSOS">SOS</button>
+      </div>
+    </div>
   </div>
-  <script src="js/main.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Leaflet Map Initialization
+    var map = L.map('map').setView([50.06914, 19.9547], 17);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    // SOS Button Click Event
+    document.getElementById('triggerSOS').addEventListener('click', function() {
+      navigator.vibrate([100, 100, 100, 300, 300, 300, 100, 100, 100]);
+    });
+
+    // Show Map Button Click Event
+    document.getElementById('showMap').addEventListener('click', function() {
+      // Check if geolocation is supported
+      if ("geolocation" in navigator) {
+        // Get current position
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          // Set map view to current position
+          map.setView([lat, lng], 17);
+          // Add marker to current position
+          L.marker([lat, lng]).addTo(map);
+        });
+      } else {
+        alert("Geolokalizacja nie jest obsługiwana przez tę przeglądarkę.");
+      }
+      $('#mapModal').modal('show');
+    });
+  </script>
 </body>
 </html>
