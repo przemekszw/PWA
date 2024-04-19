@@ -1,4 +1,4 @@
-var CACHE_NAME = 'my-site-cache-v1';
+var cacheName = 'my-site-cache-v1';
 var urlsToCache = [
   'index.html',
   'manifest.json',
@@ -15,7 +15,7 @@ self.addEventListener('install', function(e) {
 });
 
 /* Serve cached content when offline */
-self.addEventListener('fetch', function(e) {
+self.addEventListener("fetch", function(e) {
   e.respondWith(
     caches.match(e.request).then(function(response) {
       return response || fetch(e.request);
