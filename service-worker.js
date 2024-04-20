@@ -1,7 +1,7 @@
 const staticDevCoffee = "dev-site-v1"
 const assets = [
   //'/',
-  'index.html',
+  'index.html'
   //'manifest.json',
   //'icon.png'
 ];
