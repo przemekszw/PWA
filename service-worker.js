@@ -1,24 +1,25 @@
-const staticDevCoffee = "dev-site-v1"
-const assets = [
+var cacheName = 'hello-pwa';
+var filesToCache = [
   //'/',
-  'index.html'
-  //'manifest.json',
-  //'icon.png'
+  'index.html'//,
+  //'/css/style.css',
+  //'/js/main.js'
 ];
+
 /* Start the service worker and cache all of the app's content */
-self.addEventListener("install", installEvent => {
-  installEvent.waitUntil(
-    caches.open(staticDevCoffee).then(cache => {
-      cache.addAll(assets)
+self.addEventListener('install', function(e) {
+  e.waitUntil(
+    caches.open(cacheName).then(function(cache) {
+      return cache.addAll(filesToCache);
     })
-  )
-})
+  );
+});
 
 /* Serve cached content when offline */
-self.addEventListener("fetch", fetchEvent => {
-  fetchEvent.respondWith(
-    caches.match(fetchEvent.request).then(res => {
-      return res || fetch(fetchEvent.request)
+self.addEventListener('fetch', function(e) {
+  e.respondWith(
+    caches.match(e.request).then(function(response) {
+      return response || fetch(e.request);
     })
-  )
-})
+  );
+});
