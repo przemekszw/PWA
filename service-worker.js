@@ -2,8 +2,8 @@ const staticDevCoffee = "dev-site-v1"
 const assets = [
   //'/',
   'index.html',
-  'manifest.json',
-  'icon.png'
+  //'manifest.json',
+  //'icon.png'
 ];
 /* Start the service worker and cache all of the app's content */
 self.addEventListener("install", installEvent => {
